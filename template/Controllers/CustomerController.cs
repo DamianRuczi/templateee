@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using template.DTOs;
 using template.Services;
 
 namespace template.Controllers;
@@ -12,5 +13,18 @@ public class CustomerController(IDbService dbService) : ControllerBase
     {
         var purchases = await dbService.GetPurchases();
         return Ok(purchases);
+    }
+    
+    [HttpGet("{customerId}/purchases")]
+    public async Task<ActionResult<GetPurchasesDto>> GetCustomerPurchases(int customerId)
+    {
+        var customerDto = await dbService.GetPurchases(customerId);
+
+        if (customerDto == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(customerDto);
     }
 }

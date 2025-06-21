@@ -67,7 +67,7 @@ public class MyDbContext : DbContext
             },
             new AvailableProgram
             {
-                AvailableProgramId = 1,
+                AvailableProgramId = 3,
                 WashingMachineId = 2,
                 ProgramId = 1,
                 Price = 12.00m
@@ -81,15 +81,21 @@ public class MyDbContext : DbContext
             {
                 AvailableProgramId = 1,
                 CustomerId = 1,
-                PurchaseDate = DateTime.Now,
+                PurchaseDate = new DateTime(2024, 01, 01, 10, 00, 00),
             },
             new PurchaseHistory
             {
                 AvailableProgramId = 2,
                 CustomerId = 1,
-                PurchaseDate = DateTime.Now,
+                PurchaseDate = new DateTime(2024, 01, 01, 10, 00, 00),
                 Rating = 4
             }
         };
+        
+        modelBuilder.Entity<Customer>().HasData(customers);
+        modelBuilder.Entity<WashingMachine>().HasData(washingMachines);
+        modelBuilder.Entity<WashingProgram>().HasData(programs);
+        modelBuilder.Entity<AvailableProgram>().HasData(availablePrograms);
+        modelBuilder.Entity<PurchaseHistory>().HasData(purchaseHistories);
     }
 }
