@@ -9,6 +9,7 @@ public interface IDbService
 {
     public Task<GetPurchasesDto> GetPurchases(int customerId = 0);
     Task<IEnumerable<GetPurchasesDto>> GetCustomers();
+    Task DeleteCustomerAsync(int customerId);
 }
 
 public class DbService(MyDbContext data) : IDbService
@@ -95,5 +96,19 @@ public class DbService(MyDbContext data) : IDbService
         }).ToList();
 
         return customerDtos;
+    }
+
+    public async Task DeleteCustomerAsync(int customerId)
+    {
+        var customer = await data.Customers
+            .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+
+        if (customer == null)
+        {
+            throw new CustomersNotFoundException($"Customer with ID {customerId} not found.");
+        }
+
+        data.Customers.Remove(customer);
+        await data.SaveChangesAsync();
     }
 }
