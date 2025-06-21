@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using template.DTOs;
+using template.Exceptions;
 using template.Services;
 
 namespace template.Controllers;
@@ -9,10 +10,17 @@ namespace template.Controllers;
 public class CustomerController(IDbService dbService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetPurchases()
+    public async Task<IActionResult> GetCustomers()
     {
-        var purchases = await dbService.GetPurchases();
-        return Ok(purchases);
+        try
+        {
+            var customers = await dbService.GetCustomers();
+            return Ok(customers);
+        }
+        catch (CustomersNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
     }
     
     [HttpGet("{customerId}/purchases")]
